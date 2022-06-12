@@ -15,6 +15,8 @@ Database = namedtuple('Database', 'name path_obj')
 # Directories
 DATABASE_DIR: Final[Path] = Path.cwd().joinpath('goki', 'databases')  # Database directory
 EQUIPMENT_DIR: Final[Path] = DATABASE_DIR.joinpath('equipment')  # Database/Equipment directory
+# Equipment/Art
+EQUIP_ART_DB: Final[Database] = Database('Art', EQUIPMENT_DIR.joinpath('art.db'))
 # Equipment/Clothing
 EQUIP_CLOTHING_DB: Final[Database] = Database('Clothing', EQUIPMENT_DIR.joinpath('clothing.db'))
 # Equipment/Food
@@ -26,12 +28,13 @@ EQUIP_TOOL_DB: Final[Database] = Database('Tool', EQUIPMENT_DIR.joinpath('tool.d
 # Equipment/Weapon
 EQUIP_WEAPON_DB: Final[Database] = Database('Weapon', EQUIPMENT_DIR.joinpath('weapon.db'))
 # Equipment Database List
-EQUIP_DB_LIST: Final[List[Database]] = [EQUIP_CLOTHING_DB,
-                                        EQUIP_FOOD_DB,
-                                        EQUIP_MISC_DB,
-                                        EQUIP_TOOL_DB,
-                                        EQUIP_WEAPON_DB,
-                                        ]
+EQUIP_DB_LIST: Final[List[Database]] = [
+    EQUIP_ART_DB,
+    EQUIP_CLOTHING_DB,
+    EQUIP_FOOD_DB,
+    EQUIP_MISC_DB,
+    EQUIP_TOOL_DB,
+    EQUIP_WEAPON_DB,]
 
 # MENUS
 MAIN_MENU: Final = Menu('GOBLIN KING', {1: 'Randomize equipment', 2: 'Randomize a character',
