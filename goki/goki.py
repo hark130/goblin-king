@@ -77,6 +77,6 @@ def print_rando_equipment() -> None:
     equip_list = rando_equipment()
 
     # PRINT IT
-    print('\nRandom Equipment')
+    print('\nRandom Equipment:')
     for equip_entry in equip_list:
         print(f'\t{equip_entry}')
