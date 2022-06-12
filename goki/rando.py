@@ -6,6 +6,7 @@ from typing import List
 import random
 # Third Party Imports
 # Local Imports
+from goki.constants import EQUIP_DB_LIST
 
 
 def rando_db_entry(db_file: Path) -> str:
@@ -30,7 +31,6 @@ def rando_db_entry(db_file: Path) -> str:
     entry = random.choice(db_entries)      # Database entry to return
 
     # DONE
-    print(f'rando_db_entry({str(db_file)}) returning {entry}')
     return entry
 
 
@@ -86,6 +86,58 @@ def rando_db_entries(db_file: Path, num_entries: int) -> List[str]:
     return entry_list
 
 
+def rando_equipment(num_items: int = 10, verbose: bool = True) -> List[str]:
+    """Randomize a number of equipment items.
+
+    Randomly select items from randomly selected equipment databases.  List may contain duplicate
+    entries.
+
+    Args:
+        num_items: Optional; Number of items to return in the list.
+        verbose: Optional; Add the prepend the item with the equipment sub-category.
+            If True, 'bagels' becomes 'Food: bagels'
+
+    Raises:
+        FileNotFoundError: Listed database does not exist.
+        LookupError: Listed database does not contain valid entries.
+        OSError: Listed database exists but is not a file.
+        TypeError: Invalid data type.
+        ValueError: Invalid number of items.
+
+    Returns:
+        A list of equipment items randomized from the various equipment database files.
+    """
+    # LOCAL VARIABLES
+    rando_db = None  # Database namedtuple randomized from EQUIP_DB_LIST
+    temp_entry = ''  # Temporary random equipment item pulled from a random database
+    equip_list = []  # List of random equipment items to return
+
+    # INPUT VALIDATION
+    if not isinstance(num_items, int):
+        raise TypeError(f'num_items must be of type int instead of {type(num_items)}')
+    if num_items < 1:
+        raise ValueError(f'num_items must be greater than 0')
+    if not isinstance(verbose, bool):
+        raise TypeError(f'verbose must be of type bool instead of {type(verbose)}')
+
+    # DO IT
+    while True:
+        # Get a random database
+        rando_db = random.choice(EQUIP_DB_LIST)
+        # Get a random entry
+        temp_entry = rando_db_entry(rando_db.path_obj)
+        # Store it
+        if verbose:
+            temp_entry = rando_db.name + ': ' + temp_entry
+        equip_list.append(temp_entry)
+        # Done?
+        if len(equip_list) == num_items:
+            break  # Done.
+
+    # DONE
+    return equip_list
+
+
 def _get_db_entries(db_file: Path) -> List[str]:
     """Read database entries.
 
@@ -111,7 +163,7 @@ def _get_db_entries(db_file: Path) -> List[str]:
 
     # READ DB
     with open(db_file, 'r') as in_file:
-        db_entries = [entry.lower() for entry in in_file.read().split() if entry]
+        db_entries = [entry.lower() for entry in in_file.read().split('\n') if entry]
     if not db_entries:
         raise LookupError(f'{str(db_file)} did not contain any valid database entries')
 
