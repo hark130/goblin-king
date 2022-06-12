@@ -6,7 +6,7 @@
 from goki.constants import EQUIP_FOOD_DB, MAIN_MENU
 from goki.menu import get_choice
 from goki.misc import print_exception
-from goki.rando import rando_db_entries, rando_db_entry
+from goki.rando import rando_db_entries, rando_db_entry, rando_equipment
 
 
 def main() -> int:
@@ -46,18 +46,21 @@ def main() -> int:
         try:
             # 1: Randomize Equipment
             if user_input == 1:
-                print(f'One item: {rando_db_entry(EQUIP_FOOD_DB.path_obj)}')
-                print(f'Ten items:{rando_db_entries(EQUIP_FOOD_DB.path_obj, 10)}')
+                # print(f'One item: {rando_db_entry(EQUIP_FOOD_DB.path_obj)}')
+                # print(f'Ten items:{rando_db_entries(EQUIP_FOOD_DB.path_obj, 10)}')
+                # print(f'Rando Equipment: {rando_equipment()}')
+                print_rando_equipment()
                 clear_screen = False  # Don't clear the results
             # 2: Randomize Character
             elif user_input == 2:
-                print_exception(NotImplementedError('The "randomize character" feature is not done.'))
+                print_exception(
+                    NotImplementedError('The "randomize character" feature is not done.'))
             # 999: Exit
             elif user_input == 999:
                 break
             else:
                 ret_val = 3  # How did we get here?!
-        except (TypeError, ValueError, FileNotFoundError, LookupError) as err:
+        except (TypeError, ValueError, FileNotFoundError, LookupError, OSError) as err:
             print_exception(err)
             ret_val = 1
         except Exception as err:
@@ -66,3 +69,14 @@ def main() -> int:
 
     # DONE
     return ret_val
+
+
+def print_rando_equipment() -> None:
+    """Print some rando equipment."""
+    # LOCAL VARIABLES
+    equip_list = rando_equipment()
+
+    # PRINT IT
+    print('\nRandom Equipment')
+    for equip_entry in equip_list:
+        print(f'\t{equip_entry}')
